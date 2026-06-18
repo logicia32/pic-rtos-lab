@@ -8,6 +8,10 @@ PIC 風ニーモニックのテキストを picvm.Instr のリストに変換す
     label:             ; ラベル (この位置の命令アドレスを覚える)
         MOVLW 1        ; 命令 + オペランド
     ; のあとはコメント
+
+制約 (教材なので割り切り):
+- EQU の右辺は「その行までに定義済み」のシンボルのみ (後方参照は不可)。
+- オペランドはカンマ / 空白どちらの区切りでも可。
 """
 
 from __future__ import annotations
@@ -58,7 +62,8 @@ def assemble(text):
             continue
 
         mnem = parts[0].upper()
-        operands = [p.rstrip(",") for p in parts[1:]]
+        # オペランドはカンマ区切り。"F,0" でも "F, 0" でも同じに割る。
+        operands = " ".join(parts[1:]).replace(",", " ").split()
         raw.append((mnem, operands))
 
     # --- パス 2: オペランドを解決して Instr を作る ---
