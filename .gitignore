@@ -1,0 +1,13 @@
+# gpasm / gpsim build artifacts (regenerate with `make`)
+*.hex
+*.cod
+*.lst
+*.err
+
+# Python
+__pycache__/
+*.pyc
+
+# internal notes — never publish
+ARTICLE_OUTLINE*.md
+*.internal.md

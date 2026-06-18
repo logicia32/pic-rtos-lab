@@ -1,0 +1,32 @@
+# gpsim バッチスクリプト: rtos18 を走らせて文脈切り替えを観察する
+#   LD_LIBRARY_PATH=~/.local/lib gpsim -i -c run.stc
+load rtos18.cod
+
+# 検証の要は STKPTR (0xffc)。切替が壊れていればここが増え続ける。
+# (break so/su はスタックあふれで自動停止できるが p18f452 では gpsim 非対応)
+
+# --- checkpoint 1 ---
+break c 300
+run
+reg(0x00)
+reg(0x01)
+reg(0x02)
+reg(0xffc)
+
+# --- checkpoint 2 ---
+break c 1500
+run
+reg(0x00)
+reg(0x01)
+reg(0x02)
+reg(0xffc)
+
+# --- checkpoint 3 ---
+break c 4000
+run
+reg(0x00)
+reg(0x01)
+reg(0x02)
+reg(0xffc)
+
+quit

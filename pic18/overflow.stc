@@ -1,0 +1,26 @@
+# gpsim バッチ: ハードスタックを溢れさせて 31 段の天井を観察する
+#   LD_LIBRARY_PATH=~/.local/lib gpsim -i -c overflow.stc
+load overflow.cod
+
+# depth(0x00) と STKPTR(0xffc) を時間を追って比べる。
+# STKPTR の bit0..4 = 段数、bit7 = STKFUL(あふれ検出)。
+
+# --- 潜り始め ---
+break c 40
+run
+reg(0x00)
+reg(0xffc)
+
+# --- 天井 (31段) 付近 ---
+break c 110
+run
+reg(0x00)
+reg(0xffc)
+
+# --- 天井を越えてもコードは潜り続ける (depth だけ増える) ---
+break c 600
+run
+reg(0x00)
+reg(0xffc)
+
+quit
