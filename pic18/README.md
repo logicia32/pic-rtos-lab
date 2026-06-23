@@ -60,11 +60,11 @@ make run-overflow
 `make run`（STKPTR が 0〜1 のまま）と並べると、文脈切替で TCB に逃がす意味が一目で分かる。
 
 > `CONFIG STVR = OFF` にしてあるので、あふれてもリセットせず STKFUL を観察できる。
-> `STVR = ON` にすると、32 個目の CALL/PUSH でオーバーフローが検出され、同じバグが
-> 「即リセット」へ化ける。
+> `STVR = ON` にすると、31 段目を積んで満杯になるその CALL/PUSH で STKFUL が立つと同時に、
+> 同じバグが「即リセット」へ化ける。
 >
-> なお「満杯後に STKPTR が 31 で飽和する」のはここでの gpsim 観測。実機での正確な
-> 満杯時動作（飽和・上書き・リセットのどれか）は `STVREN` と各デバイスの datasheet を参照。
+> なお実機（datasheet）では、`STVREN = OFF` なら STKFUL が立って STKPTR は 31 で飽和し、
+> 以後の push は 31 段目を上書きせず捨てられる。`STVREN = ON` ならその満杯の push でリセット。
 
 ## ファイル
 
